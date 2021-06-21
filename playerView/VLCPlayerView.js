@@ -135,19 +135,7 @@
      return (
        <TouchableOpacity
          activeOpacity={1}
-         style={[styles.videoBtn, style]}
-         onPressOut={() => {
-           let currentTime = new Date().getTime();
-           if (this.touchTime === 0) {
-             this.touchTime = currentTime;
-             this.setState({ showControls: !this.state.showControls });
-           } else {
-             if (currentTime - this.touchTime >= 500) {
-               this.touchTime = currentTime;
-               this.setState({ showControls: !this.state.showControls });
-             }
-           }
-         }}>
+         style={[styles.videoBtn, style]}>
          <VLCPlayer
            ref={ref => (this.vlcPlayer = ref)}
            paused={this.state.paused}
@@ -224,45 +212,6 @@
                </View>
              )}
            </View>
-         </View>
-         <View style={[styles.bottomView]}>
-           {showControls && (
-             <ControlBtn
-               //style={isFull?{width:deviceHeight}:{}}
-               showSlider={!isGG}
-               showGG={showGG}
-               onEnd={onEnd}
-               title={title}
-               onLeftPress={onLeftPress}
-               paused={this.state.paused}
-               isFull={isFull}
-               currentTime={this.state.currentTime}
-               totalTime={this.state.totalTime}
-               onPausedPress={this._play}
-               onFullPress={this._toFullScreen}
-               onValueChange={value => {
-                 this.changingSlider = true;
-                 this.setState({
-                   currentTime: value,
-                 });
-               }}
-               onSlidingComplete={value => {
-                 this.changingSlider = false;
-                 if (Platform.OS === 'ios') {
-                   this.vlcPlayer.seek(Number((value / this.state.totalTime).toFixed(17)));
-                 } else {
-                   this.vlcPlayer.seek(value);
-                 }
-               }}
-               showGoLive={showGoLive}
-               onGoLivePress={onGoLivePress}
-               onReplayPress={onReplayPress}
-               titleGolive={titleGolive}
-               showLeftButton={showLeftButton}
-               showMiddleButton={showMiddleButton}
-               showRightButton={showRightButton}
-             />
-           )}
          </View>
        </TouchableOpacity>
      );
@@ -468,7 +417,7 @@
      //   });*/
      // }
      this._onError();
-     console.log("OnEnded mate <3");
+     console.log("onEnded/onError");
    }
  
    /**
