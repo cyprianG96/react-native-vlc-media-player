@@ -265,7 +265,6 @@
          this.setState({
            paused: false,
            isLoading: false,
-          isEnding: false,
          });
        });
        this.bufferInterval = null;
@@ -283,6 +282,7 @@
      this.reloadSuccess = false;
      this.setState({
        isError: true,
+       isEnding: false,
      });
      if(this.state.isError){
        this._reload();
