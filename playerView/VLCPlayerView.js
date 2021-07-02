@@ -30,6 +30,7 @@
  
    constructor(props) {
      super(props);
+
      this.state = {
        paused: true,
        isLoading: true,
@@ -54,7 +55,7 @@
      playInBackground: false,
      isGG: false,
      autoplay: true,
-     errorTitle: 'Error play video, please try again'
+     errorTitle: 'Error play video, please try again',
    };
  
    componentDidMount() {
@@ -81,7 +82,8 @@
        this.changeUrl = true;
      }
    }
- 
+
+
    render() {
      let {
        onEnd,
@@ -105,7 +107,7 @@
        showRightButton,
        errorTitle
      } = this.props;
-     let { isLoading, loadingSuccess, showControls, isError } = this.state;
+     let { isLoading, loadingSuccess, showControls, isError, isEnding } = this.state;
      let showGG = false;
      let realShowLoding = false;
      let source = {};
@@ -155,27 +157,16 @@
            onOpen={this._onOpen}
            onLoadStart={this._onLoadStart}
          />
-         {realShowLoding &&
-           !isError && (
+         {/* {realShowLoding &&
+           !isEnding && (
              <View style={styles.loading}>
                <ActivityIndicator size={'large'} animating={true} color="#fff" />
              </View>
-           )}
-         {isError && (
-           <View style={[styles.loading, { backgroundColor: '#000' }]}>
-             <Text style={{ color: 'red' }}>{errorTitle}</Text>
-             <TouchableOpacity
-               activeOpacity={1}
-               onPress={this._reload}
-               style={{
-                 width: 100,
-                 alignItems: 'center',
-                 justifyContent: 'center',
-                 marginTop: 10,
-               }}>
-               <Icon name={'reload'} size={45} color="#fff" />
-             </TouchableOpacity>
-           </View>
+           )} */}
+         {!isEnding &&(
+          <View style={styles.loading}>
+              <ActivityIndicator size={'large'} animating={true} color="#fff" />
+          </View>
          )}
          <View style={styles.topView}>
            <View style={styles.backBtn}>
@@ -223,6 +214,9 @@
     */
    onPlaying(event) {
      this.isEnding = false;
+     this.setState({
+       isEnding: true,
+     })
      // if (this.state.paused) {
      //   this.setState({ paused: false });
      // }
@@ -271,6 +265,7 @@
          this.setState({
            paused: false,
            isLoading: false,
+          isEnding: false,
          });
        });
        this.bufferInterval = null;
@@ -289,6 +284,9 @@
      this.setState({
        isError: true,
      });
+     if(this.state.isError){
+       this._reload();
+     }
    };
  
    _onOpen = e => {
